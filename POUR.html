@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Interactivo de Accesibilidad | Origen Justo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Earth Tones -->
+    <!-- Application Structure Plan: The SPA is structured as a narrative, educational journey. It begins with a high-level introduction to the "Origen Justo" mission and the POUR concept. The user then scrolls through four dedicated, interactive sections, one for each POUR principle (Perceptible, Operable, Understandable, Robust). Each section provides a clear definition followed by small, hands-on modules that demonstrate the concepts in action (e.g., toggling alt-text, experiencing keyboard navigation). The journey culminates in a large, integrated "Product Page Showcase" where users can click on hotspots to see how all POUR principles converge in a real-world component. This thematic, interactive-first structure was chosen over a static slide-by-slide format to transform passive reading into active learning, making the abstract concepts of accessibility tangible and memorable. -->
+    <!-- Visualization & Content Choices: Report Info: POUR Principles -> Goal: Educate & Demonstrate -> Viz/Presentation Method: Interactive UI Modules (built with HTML/CSS/JS) -> Interaction: Toggles, Click-to-reveal, Keyboard-based tasks, Hotspot annotations -> Justification: These interactions make abstract principles concrete. For instance, instead of just *telling* the user about keyboard navigation, a module *requires* them to use it, providing direct experience. Hotspots on the final showcase allow for layered, contextual information without cluttering the UI. This approach directly supports the educational goal of the designed structure. -> Library/Method: Vanilla JavaScript, Tailwind CSS. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #FDFBF8;
+            color: #3D352E;
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .hero-bg {
+            background-image: linear-gradient(rgba(46, 38, 30, 0.7), rgba(46, 38, 30, 0.7)), url('https://placehold.co/1600x900/8C6D52/FFFFFF?text=Artesan%C3%ADa+y+Cultura');
+            background-size: cover;
+            background-position: center;
+        }
+        .card-pour {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-pour:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .hotspot {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #D97706;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 2px solid white;
+        }
+        .hotspot:hover {
+            transform: scale(1.2);
+        }
+        .hotspot-tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .hotspot-container:hover .hotspot-tooltip, .hotspot:focus + .hotspot-tooltip, .hotspot-tooltip.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+        .focus-outline {
+            outline: 2px solid #D97706;
+            outline-offset: 2px;
+        }
+        .keyboard-nav-demo a:focus-visible, .keyboard-nav-demo button:focus-visible {
+             outline: 3px solid #F59E0B;
+             outline-offset: 2px;
+             border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-[#FDFBF8]/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-[#A67B5B]">Origen Justo</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#pour" class="text-gray-700 hover:text-[#D97706] px-3 py-2 rounded-md text-sm font-medium">Metodología POUR</a>
+                        <a href="#showcase" class="text-gray-700 hover:text-[#D97706] px-3 py-2 rounded-md text-sm font-medium">Caso Práctico</a>
+                        <a href="#conclusion" class="text-gray-700 hover:text-[#D97706] px-3 py-2 rounded-md text-sm font-medium">Conclusión</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-bg text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold">Diseñando un Futuro Inclusivo</h1>
+                <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto">Un análisis interactivo de accesibilidad web para el sitio "Origen Justo", basado en la metodología POUR.</p>
+            </div>
+        </section>
+
+        <!-- POUR Introduction -->
+        <section id="pour" class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-[#A67B5B]">¿Qué es la Metodología POUR?</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Es el pilar de la accesibilidad web. Para que una web sea accesible para todos, su diseño y contenido deben cumplir con cuatro principios fundamentales. Haga clic en cada principio para saber más.</p>
+                </div>
+                <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+                    <!-- Perceptible Card -->
+                    <div class="card-pour bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-bold text-[#D97706]">Perceptible</h3>
+                        <p class="mt-2 text-gray-600">La información no puede ser invisible a todos los sentidos del usuario.</p>
+                    </div>
+                    <!-- Operable Card -->
+                    <div class="card-pour bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-bold text-[#D97706]">Operable</h3>
+                        <p class="mt-2 text-gray-600">La interfaz no puede requerir una interacción que un usuario no pueda realizar.</p>
+                    </div>
+                    <!-- Understandable Card -->
+                    <div class="card-pour bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-bold text-[#D97706]">Comprensible</h3>
+                        <p class="mt-2 text-gray-600">El contenido y la operación no pueden estar más allá de la comprensión del usuario.</p>
+                    </div>
+                    <!-- Robust Card -->
+                    <div class="card-pour bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-bold text-[#D97706]">Robusto</h3>
+                        <p class="mt-2 text-gray-600">El contenido debe ser compatible con las tecnologías actuales y futuras.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Principles Deep Dive -->
+        <div class="space-y-16 md:space-y-24 bg-gray-50 py-20">
+            <!-- Perceptible Section -->
+            <section id="perceptible" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center text-[#A67B5B]">P: Perceptible</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto text-center">En esta sección, exploramos cómo asegurar que el contenido pueda ser percibido por todos. Esto incluye proporcionar alternativas textuales para contenido no textual y garantizar que el contenido sea fácil de ver y oír.</p>
+                <div class="mt-12 grid md:grid-cols-2 gap-12 items-start">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-xl mb-4">Demo: Texto Alternativo (Alt Text)</h3>
+                        <img src="https://placehold.co/600x400/8C6D52/FFFFFF?text=Huipil+de+Chiapas" alt="Huipil de algodón blanco con intrincados bordados de flores multicolores, hecho a mano por artesanas de Zinacantán." class="rounded-md mb-4 w-full">
+                        <button id="toggleAltText" class="bg-[#D97706] text-white px-4 py-2 rounded-md hover:bg-amber-700">Mostrar Texto Alternativo</button>
+                        <p id="altTextDisplay" class="mt-4 p-4 bg-gray-100 rounded-md hidden italic"><strong>Alt text:</strong> "Huipil de algodón blanco con intrincados bordados de flores multicolores, hecho a mano por artesanas de Zinacantán."</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-xl mb-4">Demo: Contraste de Color</h3>
+                        <div id="contrastDemo" class="p-4 rounded-md" style="background-color: #A67B5B;">
+                            <p class="text-lg" style="color: #8C6D52;">Texto con bajo contraste. Difícil de leer.</p>
+                        </div>
+                        <button id="fixContrast" class="mt-4 bg-[#D97706] text-white px-4 py-2 rounded-md hover:bg-amber-700">Corregir Contraste</button>
+                        <p class="mt-4 text-sm text-gray-500">Un contraste adecuado (mínimo 4.5:1 para texto normal) es crucial para la legibilidad.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Operable Section -->
+            <section id="operable" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center text-[#A67B5B]">O: Operable</h2>
+                 <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto text-center">Aquí, el foco está en la interacción. Una interfaz operable significa que todos, incluyendo quienes no usan un mouse, pueden navegar y utilizar todas las funcionalidades del sitio de manera efectiva.</p>
+                <div class="mt-12 grid md:grid-cols-2 gap-12 items-start">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-xl mb-4">Demo: Navegación por Teclado</h3>
+                        <p class="mb-4">Intente navegar por los siguientes elementos usando solo la tecla `Tab`. Notará un borde de color naranja que indica qué elemento está enfocado.</p>
+                        <nav class="keyboard-nav-demo space-y-3">
+                            <a href="#" class="block text-[#D97706] hover:underline">Primer enlace</a>
+                            <button class="bg-gray-200 px-4 py-2 rounded-md">Un botón</button>
+                            <a href="#" class="block text-[#D97706] hover:underline">Segundo enlace</a>
+                        </nav>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-xl mb-4">Demo: Sin Trampas de Teclado</h3>
+                        <p class="mb-4">Al abrir un modal (ventana emergente), el foco del teclado debe quedar "atrapado" dentro hasta que se cierre. Presione `Esc` o el botón de cerrar para salir.</p>
+                        <button id="openModal" class="bg-[#D97706] text-white px-4 py-2 rounded-md hover:bg-amber-700">Abrir Modal</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Understandable Section -->
+            <section id="understandable" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center text-[#A67B5B]">U: Comprensible</h2>
+                 <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto text-center">La claridad es clave. Esta sección demuestra cómo un lenguaje sencillo, una navegación consistente y etiquetas claras en los formularios hacen que el sitio sea intuitivo y fácil de usar para todos.</p>
+                <div class="mt-12 grid md:grid-cols-2 gap-12 items-start">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-xl mb-4">Ejemplo: Lenguaje Claro y Sencillo</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <p class="font-bold text-red-600">❌ Complejo:</p>
+                                <p class="p-2 bg-red-50 rounded-md">"Optimice su sinergia decorativa con este textil paradigmático."</p>
+                            </div>
+                            <div>
+                                <p class="font-bold text-green-600">✅ Sencillo:</p>
+                                <p class="p-2 bg-green-50 rounded-md">"Dale vida a tu sala con este cojín tejido a mano."</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-xl mb-4">Ejemplo: Etiquetas de Formulario Claras</h3>
+                        <p class="mb-4">Una etiqueta (`&lt;label&gt;`) debe estar conectada a su campo de entrada. Haga clic en la etiqueta "Correo electrónico" de abajo. Notará que el cursor se activa en el campo correcto.</p>
+                        <div class="mt-4">
+                            <label for="email" class="block text-sm font-medium text-gray-700 cursor-pointer">Correo electrónico</label>
+                            <input type="email" id="email" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Robust Section -->
+            <section id="robust" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center text-[#A67B5B]">R: Robusto</h2>
+                 <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto text-center">Un sitio robusto está construido con estándares web sólidos. Esto asegura que funcione en diferentes navegadores, dispositivos y, crucialmente, con tecnologías de asistencia como los lectores de pantalla.</p>
+                <div class="mt-12 grid md:grid-cols-2 gap-12 items-start">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-xl mb-4">Concepto: HTML Semántico</h3>
+                        <p class="mb-4">Usar las etiquetas HTML correctas para su propósito (`&lt;nav&gt;`, `&lt;main&gt;`, `&lt;button&gt;`) crea una estructura lógica que las tecnologías de asistencia pueden interpretar fácilmente.</p>
+                        <pre class="bg-gray-800 text-white p-4 rounded-md text-sm"><code>&lt;!-- Estructura correcta --&gt;
+&lt;nav&gt;...&lt;/nav&gt;
+&lt;main&gt;
+  &lt;h1&gt;Nuestros Textiles&lt;/h1&gt;
+&lt;/main&gt;
+&lt;footer&gt;...&lt;/footer&gt;</code></pre>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-xl mb-4">Concepto: Diseño Responsivo</h3>
+                        <p class="mb-4">El contenido debe adaptarse y ser funcional en cualquier tamaño de pantalla, desde un teléfono móvil hasta un monitor de escritorio. Intente cambiar el tamaño de esta ventana del navegador para ver cómo se ajusta el diseño.</p>
+                         <div class="mt-4 p-4 border-dashed border-2 border-gray-300 rounded-md text-center">
+                            <span class="text-5xl">📱</span>
+                            <span class="text-5xl">💻</span>
+                            <span class="text-5xl">🖥️</span>
+                            <p class="mt-2 font-medium">Un diseño, múltiples dispositivos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Integrated Showcase -->
+        <section id="showcase" class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-[#A67B5B]">Caso Práctico: Página de Producto</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Aquí se unen todos los principios. Interactúe con los puntos de acceso (+) en la maqueta de abajo para ver cómo se aplican los principios POUR en un componente real del sitio "Origen Justo".</p>
+                </div>
+
+                <div class="mt-12 max-w-5xl mx-auto bg-white rounded-lg shadow-2xl p-6 md:p-8">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Product Image Side -->
+                        <div class="relative">
+                            <img src="https://placehold.co/600x600/D4A276/FFFFFF?text=Coj%C3%ADn+Zapoteco" alt="Cojín Zapoteco 'Sol de Montaña' con patrones geométricos en tonos tierra, sobre un sofá neutro." class="rounded-lg w-full">
+                            <div class="hotspot-container" style="top: 20%; left: 30%;">
+                                <button class="hotspot" aria-describedby="tooltip1">+</button>
+                                <div id="tooltip1" role="tooltip" class="hotspot-tooltip absolute bottom-full mb-2 w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
+                                    <strong>(P) Perceptible:</strong> La imagen tiene un texto alternativo descriptivo para que los lectores de pantalla puedan entender su contenido.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product Details Side -->
+                        <div class="flex flex-col justify-center">
+                            <div class="relative">
+                                <h1 class="text-3xl font-bold">Cojín Zapoteco 'Sol de Montaña'</h1>
+                                <div class="hotspot-container" style="top: 5px; right: -15px;">
+                                    <button class="hotspot" aria-describedby="tooltip2">+</button>
+                                    <div id="tooltip2" role="tooltip" class="hotspot-tooltip absolute bottom-full right-0 mb-2 w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
+                                        <strong>(U) Comprensible:</strong> El título es un encabezado de nivel 1 (`&lt;h1&gt;`), indicando claramente el tema principal de la página.
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="relative inline-block my-2">
+                                <a href="#" class="text-[#D97706] hover:underline">Ver perfil de la comunidad de Teotitlán</a>
+                                <div class="hotspot-container" style="top: 0; right: -15px;">
+                                    <button class="hotspot" aria-describedby="tooltip3">+</button>
+                                    <div id="tooltip3" role="tooltip" class="hotspot-tooltip absolute bottom-full right-0 mb-2 w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
+                                        <strong>(O) Operable:</strong> El texto del enlace es descriptivo. Un usuario de lector de pantalla sabe exactamente a dónde le llevará este enlace.
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-2xl font-semibold my-4 text-gray-800">$1,200.00 MXN</p>
+                            <p class="text-gray-600">Dale vida a tu espacio con este cojín tejido a mano. Cada patrón cuenta una historia de la tradición zapoteca.</p>
+                            
+                            <div class="mt-6 relative">
+                                <button class="w-full bg-[#A67B5B] text-white py-3 rounded-lg font-bold hover:bg-stone-600 transition-colors">Agregar al Carrito</button>
+                                <div class="hotspot-container" style="top: 10px; right: -15px;">
+                                     <button class="hotspot" aria-describedby="tooltip4">+</button>
+                                     <div id="tooltip4" role="tooltip" class="hotspot-tooltip absolute bottom-full right-0 mb-2 w-64 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
+                                        <strong>(R) Robusto & (P) Perceptible:</strong> Es un elemento `&lt;button&gt;` real, no un `&lt;div&gt;`, por lo que es robusto. Además, tiene un alto contraste de color, haciéndolo perceptible.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conclusion -->
+        <section id="conclusion" class="bg-gray-50 py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                 <h2 class="text-3xl font-bold text-[#A67B5B]">La Accesibilidad es un Principio, no una Función</h2>
+                 <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Al aplicar la metodología POUR, el sitio web de "Origen Justo" no solo cumple con estándares, sino que fortalece su misión. Un diseño inclusivo es, simplemente, un mejor diseño.</p>
+                 <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+                     <div class="bg-white p-6 rounded-lg shadow">
+                         <h3 class="font-semibold text-xl">Coherencia</h3>
+                         <p class="mt-2 text-gray-600">La misión de inclusión social se refleja en la propia plataforma digital.</p>
+                     </div>
+                     <div class="bg-white p-6 rounded-lg shadow">
+                         <h3 class="font-semibold text-xl">Mayor Alcance</h3>
+                         <p class="mt-2 text-gray-600">Permite que más personas, incluidas aquellas con discapacidad, se conviertan en clientes.</p>
+                     </div>
+                     <div class="bg-white p-6 rounded-lg shadow">
+                         <h3 class="font-semibold text-xl">Mejor Experiencia</h3>
+                         <p class="mt-2 text-gray-600">Un sitio bien estructurado y fácil de usar beneficia a todos los usuarios y mejora el SEO.</p>
+                     </div>
+                 </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div id="modal-content" class="bg-white p-8 rounded-lg shadow-xl max-w-sm w-full mx-4" role="document">
+            <h2 id="modal-title" class="text-xl font-bold mb-4">Modal de Ejemplo</h2>
+            <p class="mb-6">Puedes navegar por los elementos de este modal con la tecla `Tab`, pero no puedes salir de él. Presiona `Esc` para cerrar.</p>
+            <input type="text" placeholder="Campo de texto" class="w-full px-3 py-2 border border-gray-300 rounded-md mb-4">
+            <button id="closeModal" class="bg-red-500 text-white px-4 py-2 rounded-md">Cerrar</button>
+        </div>
+    </div>
+    
+    <footer class="bg-[#3D352E] text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 Origen Justo. Un proyecto de negocio inclusivo.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Perceptible: Alt Text Demo
+            const toggleAltTextBtn = document.getElementById('toggleAltText');
+            const altTextDisplay = document.getElementById('altTextDisplay');
+            if (toggleAltTextBtn) {
+                toggleAltTextBtn.addEventListener('click', () => {
+                    altTextDisplay.classList.toggle('hidden');
+                    toggleAltTextBtn.textContent = altTextDisplay.classList.contains('hidden') ? 'Mostrar Texto Alternativo' : 'Ocultar Texto Alternativo';
+                });
+            }
+
+            // Perceptible: Contrast Demo
+            const fixContrastBtn = document.getElementById('fixContrast');
+            const contrastDemoText = document.querySelector('#contrastDemo p');
+            if (fixContrastBtn && contrastDemoText) {
+                fixContrastBtn.addEventListener('click', () => {
+                    contrastDemoText.style.color = 'white';
+                    contrastDemoText.textContent = 'Texto con alto contraste. ¡Mucho mejor!';
+                    fixContrastBtn.style.backgroundColor = '#6B7280';
+                    fixContrastBtn.textContent = 'Corregido';
+                    fixContrastBtn.disabled = true;
+                });
+            }
+
+            // Operable: Modal Demo
+            const openModalBtn = document.getElementById('openModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            if (openModalBtn && closeModalBtn && modal) {
+                 const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+                 let firstFocusableElement, lastFocusableElement;
+
+                const openModal = () => {
+                    modal.classList.remove('hidden');
+                    const modalFocusableElements = modalContent.querySelectorAll(focusableElements);
+                    firstFocusableElement = modalFocusableElements[0];
+                    lastFocusableElement = modalFocusableElements[modalFocusableElements.length - 1];
+                    firstFocusableElement.focus();
+                };
+
+                const closeModal = () => {
+                    modal.classList.add('hidden');
+                    openModalBtn.focus();
+                };
+                
+                openModalBtn.addEventListener('click', openModal);
+                closeModalBtn.addEventListener('click', closeModal);
+
+                modal.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        closeModal();
+                    }
+                    if (e.key === 'Tab') {
+                        if (e.shiftKey) { // Shift + Tab
+                            if (document.activeElement === firstFocusableElement) {
+                                lastFocusableElement.focus();
+                                e.preventDefault();
+                            }
+                        } else { // Tab
+                            if (document.activeElement === lastFocusableElement) {
+                                firstFocusableElement.focus();
+                                e.preventDefault();
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Showcase Hotspots
+            const hotspots = document.querySelectorAll('.hotspot');
+            hotspots.forEach(hotspot => {
+                hotspot.addEventListener('click', () => {
+                    const tooltip = hotspot.nextElementSibling;
+                    tooltip.classList.toggle('visible');
+                });
+                 hotspot.addEventListener('blur', () => {
+                    const tooltip = hotspot.nextElementSibling;
+                    tooltip.classList.remove('visible');
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
